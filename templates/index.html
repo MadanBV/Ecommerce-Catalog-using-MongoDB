@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Amazon Product Catalog</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    {% if username %}
+        <p>Welcome, {{ username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+    {% endif %}
+    <h1 class="text-center">Amazon Product Catalog</h1>
+    <a href="{{ url_for('add_product') }}">Add New Product</a>
+    
+    <form action="/" method="GET" style="margin-bottom: 20px;">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Search by title..." value="{{ request.args.get('search', '') }}">
+        <br>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="min_price">Min Price:</label>
+        <input type="number" id="min_price" name="min_price" step="0.01" placeholder="0.00" value="{{ request.args.get('min_price', '') }}">
+
+        <label for="max_price">Max Price:</label>
+        <input type="number" id="max_price" name="max_price" step="0.01" placeholder="0.00" value="{{ request.args.get('max_price', '') }}">
+
+        <label for="min_stars">Min Stars:</label>
+        <input type="number" id="min_stars" name="min_stars" step="0.1" placeholder="0.0" value="{{ request.args.get('min_stars', '') }}">
+        <br>
+
+        <label for="sort_by">Sort By:</label>
+        <select id="sort_by" name="sort_by">
+            <option value="">None</option>
+            <option value="price_asc" {% if request.args.get('sort_by') == 'asin_asc' %}selected{% endif %}>Price low to high</option>
+            <option value="price_desc" {% if request.args.get('sort_by') == 'asin_desc' %}selected{% endif %}>Price high to low</option>
+            <option value="reviews_asc" {% if request.args.get('sort_by') == 'reviews_asc' %}selected{% endif %}>Reviews low to high</option>
+            <option value="reviews_desc" {% if request.args.get('sort_by') == 'reviews_desc' %}selected{% endif %}>Reviews high to low</option>
+        </select>
+
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('index') }}" style="margin-left: 10px;">Clear Filters</a>
+    </form>
+
+    <div id="product-list">
+        {% if total_count > 0 %}
+            <p>Total Products Found: {{ total_count }}</p>
+            <p>Showing top 10 results:</p>
+
+            <table>
+                <tr>
+                    <th>ASIN</th>
+                    <th>Title</th>
+                    <th>Stars</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product['asin'] }}</td>
+                    <td><a href="{{ url_for('display_product', product_id=product['_id']) }}">{{ product['title'] }}</a></td>
+                    <td>{{ product['stars'] }}</td>
+                    <td>${{ product['price'] }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_product', product_id=product['_id']) }}">Edit</a>
+                        <form action="{{ url_for('delete_product', product_id=product['_id']) }}" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Please apply filters and click "Filter" to view products.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

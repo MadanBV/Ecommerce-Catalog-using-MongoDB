@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product['title'] }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>{{ product['title'] }}</h1>
+    <img src="{{ product['imgUrl'] }}" alt="Product Image" style="width:300px;height:auto;">
+    <p><strong>ASIN:</strong> {{ product['asin'] }}</p>
+    <p><strong>Category:</strong> {{ product['categoryName'] }}</p>
+    <p><strong>Stars:</strong> {{ product['stars'] }} / 5</p>
+    <p><strong>Reviews:</strong> {{ product['reviews'] }}</p>
+    <p><strong>Price:</strong> ${{ product['price'] }}</p>
+    <p><strong>List Price:</strong> ${{ product['listPrice'] }}</p>
+    <p><strong>Bought in Last Month:</strong> {{ product['boughtInLastMonth'] }}</p>
+    <p><strong>Best Seller:</strong> {{ 'Yes' if product['isBestSeller'] else 'No' }}</p>
+    <a href="{{ product['productURL'] }}" target="_blank">View on Amazon</a><br><br>
+    <a href="{{ url_for('index') }}">Back to Catalog</a>
+</body>
+</html>

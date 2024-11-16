@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+    <h2>Add New Product</h2>
+    <form method="POST">
+        <label>ASIN: <input type="text" name="asin"></label><br>
+        <label>Title: <input type="text" name="title"></label><br>
+        <label>Stars: <input type="number" name="stars" step="0.1"></label><br>
+        <label>Price: <input type="number" name="price" step="0.01"></label><br>
+        <label>Category: <input type="text" name="categoryName"></label><br>
+        <button type="submit">Add Product</button>
+    </form>
+    <a href="{{ url_for('index') }}">Back to Catalog</a>
+</body>
+</html>
